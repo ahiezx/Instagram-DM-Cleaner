@@ -17,6 +17,8 @@ class Interface:
 
 		self.filled       = False
 
+		self.deleted      = 0
+
 	def printC(self, msg:str, color:Fore, end="\n"):
 		return print(self.hiddenspaces + color + msg + Fore.RESET, end=end)
 
@@ -28,7 +30,8 @@ f"""
 {self.hiddenspaces}{Fore.BLACK}{Back.MAGENTA}       GITHUB.COM/ASHILLES        {Back.RESET}{Style.BRIGHT}
 {self.hiddenspaces}{Back.MAGENTA}{Fore.WHITE}└                                ┘{Back.RESET}{Fore.RESET}
 
-{self.hiddenspaces}Thanks for using this tool.
+{self.hiddenspaces}This work is licensed under a Creative Commons\n{self.hiddenspaces}Attribution-NonCommercial 4.0 International License
+
 {self.hiddenspaces}Follow me on twitter {Fore.CYAN}@ASH1LLES{Fore.RESET}, S/O {Fore.CYAN}@0fve2{Fore.RESET}.
 """)
 
@@ -89,7 +92,7 @@ class Instagram:
 		self.endpoints     = {
 			"login":"/accounts/login/ajax/",
 			"logout":"/accounts/logout/",
-			"inbox":"/api/v1/direct_v2/inbox/",
+			"inbox":"/api/v1/direct_v2/inbox/?limit=500&thread_message_limit=1",
 			"hide": "/api/v1/direct_v2/threads/%s/hide/"
 		}
 
@@ -107,7 +110,7 @@ class Instagram:
 
 		self.account       = None
 
-		self.threads = []
+		self.threads       = []
 
 	def getCSRF(self):
 		try:
@@ -141,8 +144,8 @@ class Instagram:
 			else:
 				return False, "Please verify this login and make sure 2FA is disabled"
 
-		except:
-			return False, "Could not connect to Instagram."
+		except Exception as e:
+			return False, f"Could not connect to Instagram. {e}"
 
 		return False, f"\r{interface.hiddenspaces}Error logging in."
 
@@ -166,13 +169,17 @@ class Instagram:
 
 	def clean(self):
 
+		print(f"\r{interface.hiddenspaces}{Fore.BLUE}Press enter to start {Fore.RESET}", end='')
+		input()
+		print()
+
 		data = self.session.get(self.url + self.endpoints['inbox'])
 		dataJSON = data.json()
 
 		if(len(dataJSON['inbox']['threads']) < 1): # Check if inbox is not empty
 			return interface.printC(f"\r{interface.hiddenspaces}The inbox is empty.. Press enter key to exit", Fore.RED), interface.pause(), sys.exit()
 
-		print(f"\r{interface.hiddenspaces}{Back.GREEN} OK ! {Back.RESET} {Back.RED} {dataJSON['viewer']['username']} {Back.RESET} {Back.CYAN} {len(dataJSON['inbox']['threads'])} 💬 {Back.RESET}")
+		print(f"{interface.hiddenspaces}{Back.GREEN} OK ! {Back.RESET} {Back.RED} {dataJSON['viewer']['username']} {Back.RESET} {Back.CYAN} {len(dataJSON['inbox']['threads'])} 💬 {Back.RESET}{' '*7}")
 		for thread in dataJSON['inbox']['threads']:
 			self.threads.append(thread['thread_id'])
 
@@ -201,8 +208,21 @@ class Instagram:
 		}
 
 		for thread in self.threads:
-			response = self.session.post(self.url + self.endpoints['hide'] % thread, headers=headers)
-			time.sleep(2)
+			try:
+				response = self.session.post(self.url + self.endpoints['hide'] % thread, headers=headers)
+				if(response.status_code == 200):
+					interface.deleted += 1
+				interface.printC(f"{interface.deleted}/{len(self.threads)} Deleting DMs..", Fore.RESET, end='\r')
+				time.sleep(1.2)
+			except KeyboardInterrupt:
+				sys.exit()
+			except:
+				pass
+
+		print(" " * 30)
+
+		interface.printC(f"Results\n{interface.hiddenspaces}{Back.RED} Deleted {interface.deleted} out of {len(self.threads)} DMs {Back.RESET}", Fore.RESET, end='')
+		input(" ")
 
 if __name__ == "__main__":
 	
