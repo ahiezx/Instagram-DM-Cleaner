@@ -1,6 +1,5 @@
-import requests, json, colorama, time, sys, os
+import requests, json, colorama, time, sys
 from colorama import init, Fore, Style, Back
-from getpass import getpass
 
 class Interface:
 
@@ -179,7 +178,7 @@ class Instagram:
 		if(len(dataJSON['inbox']['threads']) < 1): # Check if inbox is not empty
 			return interface.printC(f"\r{interface.hiddenspaces}The inbox is empty.. Press enter key to exit", Fore.RED), interface.pause(), sys.exit()
 
-		print(f"{interface.hiddenspaces}{Back.GREEN} OK ! {Back.RESET} {Back.RED} {dataJSON['viewer']['username']} {Back.RESET} {Back.CYAN} {len(dataJSON['inbox']['threads'])} 💬 {Back.RESET}{' '*7}")
+		print(f"{interface.hiddenspaces}{Back.GREEN} OK ! {Back.RESET} {Back.RED} {dataJSON['viewer']['username']} {Back.RESET} {Back.CYAN} {len(dataJSON['inbox']['threads'])} 💬 {Back.RESET}{' '*7}\n")
 		for thread in dataJSON['inbox']['threads']:
 			self.threads.append(thread['thread_id'])
 
