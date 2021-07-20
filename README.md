@@ -16,7 +16,7 @@ pip install -r requirements.txt
 
 Fill your Instagram login credentials at the first prompt, after you successfully login you can start deleting the DMs by pressing enter.
 
-After starting the proccess should look like this
+After starting, the proccess should look like this
 
 ![image](https://user-images.githubusercontent.com/54437675/126392808-101034c2-e791-4251-9024-3c77a5acaa41.png)
 
