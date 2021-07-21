@@ -144,7 +144,7 @@ class Instagram:
 				return False, "Please verify this login and make sure 2FA is disabled"
 
 		except Exception as e:
-			return False, f"Could not connect to Instagram. {e}"
+			return False, f"Could not connect to Instagram."
 
 		return False, f"\r{interface.hiddenspaces}Error logging in."
 
