@@ -183,27 +183,27 @@ class Instagram:
 			self.threads.append(thread['thread_id'])
 
 		headers = {
-            'accept': '*/*',
-            'accept-encoding': 'gzip, deflate, br',
-            'accept-language': 'en-US,en;q=0.9',
-            'cache-control': 'no-cache',
-            'content-length': '0',
-            'content-type': 'application/x-www-form-urlencoded',
-            'cookie': f'sessionid={self.account.cookies["sessionid"]}; shbid={data.cookies["shbid"]}; shbts={data.cookies["shbts"]}; rur={self.account.cookies["rur"]}',
-            'origin': 'https://www.instagram.com',
-            'pragma': 'no-cache',
-            'referer': 'https://www.instagram.com/',
-            'sec-ch-ua': '" Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'same-site',
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            'x-asbd-id': '437806',
-            'x-csrftoken': self.csrf,
-            'x-ig-app-id': '936619743392459',
-            'x-ig-www-claim': '0',
-            'x-instagram-ajax': '3e97309db180'
+			'accept': '*/*',
+			'accept-encoding': 'gzip, deflate, br',
+			'accept-language': 'en-US,en;q=0.9',
+			'cache-control': 'no-cache',
+			'content-length': '0',
+			'content-type': 'application/x-www-form-urlencoded',
+			'cookie': f'sessionid={self.account.cookies["sessionid"]}; shbid={data.cookies["shbid"]}; shbts={data.cookies["shbts"]}; rur={self.account.cookies["rur"]}',
+			'origin': 'https://www.instagram.com',
+			'pragma': 'no-cache',
+			'referer': 'https://www.instagram.com/',
+			'sec-ch-ua': '" Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"',
+			'sec-ch-ua-mobile': '?0',
+			'sec-fetch-dest': 'empty',
+			'sec-fetch-mode': 'cors',
+			'sec-fetch-site': 'same-site',
+			'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+			'x-asbd-id': '437806',
+			'x-csrftoken': self.csrf,
+			'x-ig-app-id': '936619743392459',
+			'x-ig-www-claim': '0',
+			'x-instagram-ajax': '3e97309db180'
 		}
 
 		for thread in self.threads:
