@@ -31,7 +31,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 * [Windows 64-bit](https://github.com/Ashilles/Instagram-DM-Cleaner/raw/main/bin/x86_64/Windows/Instagram%20DM%20Cleaner.exe)
 * [Linux x86_64](https://github.com/Ashilles/Instagram-DM-Cleaner/raw/main/bin/x86_64/Linux/Instagram%20DM%20Cleaner.sh)
 
-**Notice:** Windows may think that it's a malicious file.
+**Notice:** Windows may detect it as a malicious file.
 You have to [disable real time protection](https://support.microsoft.com/en-us/windows/turn-off-defender-antivirus-protection-in-windows-security-99e6004f-c54c-8509-773c-a4d776b77960) from Windows Defender.
 
 ## License
