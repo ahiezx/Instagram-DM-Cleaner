@@ -189,7 +189,7 @@ class Instagram:
 			'cache-control': 'no-cache',
 			'content-length': '0',
 			'content-type': 'application/x-www-form-urlencoded',
-			'cookie': f'sessionid={self.account.cookies["sessionid"]}; shbid={data.cookies["shbid"]}; shbts={data.cookies["shbts"]}; rur={self.account.cookies["rur"]}',
+			'cookie': f'sessionid={self.account.cookies["sessionid"]}; shbid=100v100; shbts=200v200; rur={self.account.cookies["rur"]}',
 			'origin': 'https://www.instagram.com',
 			'pragma': 'no-cache',
 			'referer': 'https://www.instagram.com/',
