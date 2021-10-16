@@ -1,4 +1,4 @@
-import requests, json, colorama, time, sys
+import requests, json, colorama, time, sys, os, base64
 from colorama import init, Fore, Style, Back
 
 class Interface:
@@ -41,6 +41,28 @@ f"""
 			sys.exit()
 
 	def inputs(self):
+
+		# Check for previous login
+
+		while os.path.isfile((path := './login.json')):
+			print(self.hiddenspaces + f"[{Fore.MAGENTA}1{Fore.RESET}] Login with previous account")
+			print(self.hiddenspaces + f"[{Fore.MAGENTA}2{Fore.RESET}] New login\n")
+			print(self.hiddenspaces + "Login : ", end=Fore.YELLOW)
+			approach = input("")
+			if(approach not in ["1","2"]):
+				self.printC("Incorrect Setting", Fore.RED)
+			if(approach == "1"):
+				with open(path, "r") as login_json:
+					try:
+						login_data = json.load(login_json)
+						self.username = login_data['username']
+						self.password = (base64.b64decode(login_data['password'].encode("utf-8"))).decode("utf-8")
+						return
+					except:
+						print("Error parsing login.json")		
+			elif(approach == "2"):
+				print("",end=Fore.RESET)
+				break
 
 		# Username loop
 		while len(self.username) < 1:
@@ -92,7 +114,10 @@ class Instagram:
 			"login":"/accounts/login/ajax/",
 			"logout":"/accounts/logout/",
 			"inbox":"/api/v1/direct_v2/inbox/?limit=500&thread_message_limit=1",
-			"hide": "/api/v1/direct_v2/threads/%s/hide/"
+			"hide": "/api/v1/direct_v2/threads/%s/hide/",
+			"followers": '/api/v1/friendships/%s/followers/?count=50000&search_surface=follow_list_page',
+			"post_likes": '/graphql/query/?query_hash=%s&variables={"shortcode":"%s","include_reel":false,"first":51}',
+			"post_likes_after": '/graphql/query/?query_hash=%s&variables={"shortcode":"%s","include_reel":false,"first":51,"after":"%s"}'
 		}
 
 		self.session       = requests.session()
@@ -136,8 +161,16 @@ class Instagram:
 					if response['authenticated'] == False:
 						return False, "Incorrect username or password"
 					elif(response['authenticated'] == True):
+
 						self.authenticated = True
+
+						# Save login credentials + base64 password
+
+						last_login = open("./login.json","w")
+						last_login.write(f'{{"username":"{interface.username}","password":"{(base64.b64encode(interface.password.encode("ascii"))).decode("utf-8")}"}}')
+
 						return True, self.authenticated
+
 			elif('spam' in response or 'message' in response and response['message'] == 'Please wait a few minutes before you try again.'):
 				return False, "Too many requests, try again later."
 			else:
@@ -150,7 +183,7 @@ class Instagram:
 
 	def validate(self):
 
-		interface.printC("Instagram login credentials", Fore.RESET)
+		interface.printC("Instagram login credentials\n", Fore.RESET)
 
 		while not self.authenticated:
 
