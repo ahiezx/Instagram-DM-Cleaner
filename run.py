@@ -5,13 +5,33 @@ class Interface:
 
 	def __init__(self):
 
-		# initialize colors
+		# Initialize interface
 		colorama.init()
 		print(Style.BRIGHT, end='\b')
 
 		self.username     = ""
 		self.password     = ""
 
+		# Load config.json as self.config
+		try:
+			with open("./config.json", "r") as config_json:
+				self.config = json.load(config_json)
+		except FileNotFoundError:
+			# Create default config.json if it doesn't exist
+			with open("./config.json", "w") as config_json:
+				json.dump({
+					"whitelist":[],
+					"sleep_time": 1.2,
+					"filter_whitelist": False,
+					"delete_groups": False
+				}, config_json)
+    
+			self.config = json.load(open("./config.json", "r")) # Reload config.json
+
+		except Exception as e:
+			print(f"Error parsing config.json")
+			sys.exit()
+   
 		self.hiddenspaces = " " * 2
 
 		self.filled       = False
@@ -212,8 +232,23 @@ class Instagram:
 			return interface.printC(f"\r{interface.hiddenspaces}The inbox is empty.. Press enter key to exit", Fore.RED), interface.pause(), sys.exit()
 
 		print(f"{interface.hiddenspaces}{Back.GREEN} OK ! {Back.RESET} {Back.RED} {dataJSON['viewer']['username']} {Back.RESET} {Back.CYAN} {len(dataJSON['inbox']['threads'])} 💬 {Back.RESET}{' '*7}\n")
-		for thread in dataJSON['inbox']['threads']:
-			self.threads.append(thread['thread_id'])
+  
+		for thread in dataJSON['inbox']['threads']: # Loop through threads (DMs)
+      
+			if "users" in thread and len(thread['users']) > 1 and interface.config['delete_groups']: # Check if thread is a group and if we want to delete groups
+				self.threads.append(thread['thread_id']) # Add thread to threads if it is a group
+    
+			else: # If not a group
+       
+				if not interface.config['filter_whitelist'] and thread['thread_v2_id'] not in interface.config['whitelist']: # Check if user is not in whitelist
+					self.threads.append(thread['thread_id'])
+     
+				# The interface.config['filter_whitelist'] is used to invert the whitelist to blacklist
+    			# Incase you want to delete specific users from your inbox and not the rest
+    
+				elif interface.config['filter_whitelist'] and thread['thread_v2_id'] in interface.config['whitelist']: # Check if user is in whitelist and if we want to delete only the users in the whitelist
+					self.threads.append(thread['thread_id'])
+
 
 		headers = {
 			'accept': '*/*',
@@ -245,13 +280,13 @@ class Instagram:
 				if(response.status_code == 200):
 					interface.deleted += 1
 				interface.printC(f"{interface.deleted}/{len(self.threads)} Deleting DMs..", Fore.RESET, end='\r')
-				time.sleep(1.2)
+				time.sleep(interface.config['sleep_time'])
 			except KeyboardInterrupt:
 				sys.exit()
 			except:
 				pass
 
-		print(" " * 30)
+		print(" " * 30,end='\r')
 
 		interface.printC(f"Results\n{interface.hiddenspaces}{Back.RED} Deleted {interface.deleted} out of {len(self.threads)} DMs {Back.RESET}", Fore.RESET, end='')
 		input(" ")

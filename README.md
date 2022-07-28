@@ -14,13 +14,30 @@ pip install -r requirements.txt
 
 ## Usage
 
-Fill your Instagram login credentials at the first prompt, after you successfully login you can start deleting the DMs by pressing enter.
+After successfully providing your Instagram account credentials you should be able to delete direct messages like the picture below.
 
-After starting, the process should look like this
+![image](https://user-images.githubusercontent.com/54437675/181437533-bfd6d9d8-eba2-4d5f-a049-40b59fb3c921.png)
 
-![image](https://user-images.githubusercontent.com/54437675/126392808-101034c2-e791-4251-9024-3c77a5acaa41.png)
+## Configuration
+Use the `config.json` file to configure the tool.
+```json
+{
+    "whitelist": [],
+    "sleep_time": 1.2,
+    "filter_whitelist":false,
+    "delete_groups": false
+}
+```
 
-Enjoy.
+`whitelist` is a list of users you want to keep (use thread_v2_id).
+
+`sleep_time` is the time in seconds you want to wait before deleting the next DM.
+
+`filter_whitelist` is a boolean value that determines if you want to delete the whitelisted users only (blacklist).
+
+`delete_groups` is a boolean value that determines if you want to delete the groups.
+
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
